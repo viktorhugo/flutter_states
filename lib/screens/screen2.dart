@@ -9,9 +9,10 @@ class Screen2 extends StatelessWidget {
   Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Screen2'),
+          title: const Text('Screen2',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
           actions: const [],
           backgroundColor: Colors.teal,
+          iconTheme: const IconThemeData(color: Colors.white),
 
         ),
         body: Center(

@@ -1,11 +1,11 @@
 class User {
   final String name;
-  final int old;
+  final int age;
   final List<String> professions;
 
   User({
     required this.name, 
-    required this.old, 
+    required this.age, 
     required this.professions
   });
 
