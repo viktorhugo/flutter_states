@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_states/models/services/user_service.dart';
+import 'package:flutter_states/models/user.dart';
+import 'package:provider/provider.dart';
 
 
 class Screen1 extends StatelessWidget {
@@ -8,14 +11,26 @@ class Screen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final userService = Provider.of<UserService>(context, listen: true);
+
       return  Scaffold(
         appBar: AppBar(
           title: const Text('Screen1',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
-          actions: const [],
+          actions: [
+            IconButton(
+              onPressed: () => userService.removeUser(), 
+              icon: const Icon(Icons.exit_to_app)
+            )
+          ],
           backgroundColor: Colors.teal,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
-        body: const InfoUser(),
+
+        body: userService.existUser 
+          ? InfoUser( user: userService.user )
+          : const Center(child: Text('Not user selected'),),
+
         floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, 'screen2'),
           child: const Icon(Icons.account_balance_wallet_rounded),
@@ -25,8 +40,12 @@ class Screen1 extends StatelessWidget {
 }
 
 class InfoUser extends StatelessWidget {
+
+  final User user;
+
   const InfoUser({
     super.key,
+    required this.user,
   });
 
   @override
@@ -35,21 +54,23 @@ class InfoUser extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       padding: const EdgeInsets.all(20),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('General', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold) ),
-          Divider(),
+          const Text('General', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold) ),
+          const Divider(),
 
-          ListTile(title: Text('Name:'),),
-          ListTile(title: Text('Years old:'),),
+          ListTile(title: Text('Name: ${user.name}'),),
+          ListTile(title: Text('Years old: ${user.age}'),),
 
-          Text('Professions', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold) ),
-          Divider(),
+          const Text('Professions', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold) ),
+          const Divider(),
 
-          ListTile(title: Text('profession 1:'),),
-          ListTile(title: Text('profession 2:'),),
-          ListTile(title: Text('profession e:'),),
+          // const ListTile(title: Text('profession 1:'),),
+          ...user.professions!.map((item) => ListTile(
+            title: Text( item, style: const TextStyle(color: Colors.black),),
+          )),
+
         ],
       ),
     );
