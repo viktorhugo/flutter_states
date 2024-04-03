@@ -44,14 +44,19 @@ class Screen2 extends StatelessWidget {
               MaterialButton(
                 color: Colors.teal,
                 onPressed: (){
-
+                  userCubit.setAge(age: 78);
                 },
                 child: const Text('Set Years old', style: TextStyle(color: Colors.white),)
               ),
               MaterialButton(
                 color: Colors.teal,
                 onPressed: (){
-                  
+                  userCubit.setProfessions( listProfessions: [
+                      'Fullstack Developer',
+                      'XRP Developer',
+                      'QA responsibility'
+                    ] 
+                  );
                 },
                 child: const Text('Add Profession', style: TextStyle(color: Colors.white),)
               )
