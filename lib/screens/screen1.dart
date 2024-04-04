@@ -11,10 +11,20 @@ class Screen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final userCubit = context.read<UserCubit>();
+
       return  Scaffold(
         appBar: AppBar(
           title: const Text('Screen1',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
-          actions: const [],
+          actions: [
+            IconButton(
+              onPressed: () {
+                userCubit.removeUser();
+              }, 
+              icon: const Icon(Icons.logout_outlined)
+            )
+          ],
           backgroundColor: Colors.teal,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
@@ -71,7 +81,7 @@ class InfoUser extends StatelessWidget {
           const Text('Professions', style: TextStyle( fontSize: 18, fontWeight: FontWeight.bold) ),
           const Divider(),
 
-          ...user.professions!.map( (item) {
+          ...user.professions.map( (item) {
             return ListTile(title: Text('profession : $item'),);
           })
           

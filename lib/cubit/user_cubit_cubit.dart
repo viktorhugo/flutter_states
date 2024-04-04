@@ -35,6 +35,6 @@ class UserCubit extends Cubit<UserCubitState> {
   }
 
   void removeUser() { 
-
+    emit(UserCubitInitial());
   }
 }
