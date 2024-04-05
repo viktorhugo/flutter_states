@@ -33,6 +33,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
+  get: ^4.6.6
   meta: ^1.11.0
 
 dev_dependencies:

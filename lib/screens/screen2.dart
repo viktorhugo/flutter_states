@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_states/bloc/bloc/user_bloc.dart';
+import 'package:flutter_states/controllers/user_controller.dart';
 import 'package:flutter_states/models/user.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 
 
 class Screen2 extends StatelessWidget {
@@ -11,11 +12,15 @@ class Screen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final userBloc = BlocProvider.of<UserBloc>(context, listen: false);
+    print(Get.arguments);
+    final userController = Get.find<UserController>();
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Screen2',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
+          title: Text(
+            userController.user.value.name ,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
           actions: const [],
           backgroundColor: Colors.teal,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -32,26 +37,46 @@ class Screen2 extends StatelessWidget {
                     name: 'Victor Mosquera',
                     age: 40,
                     professions: [
-                      'Full Stackd Developers'
+                      'Full Stack Developers'
                     ]
                   );
-                  userBloc.add(ActivateUser(user: newUser));
+                  userController.setUser(newUser: newUser);
+                  Get.snackbar(
+                    ' Set User',
+                    '${newUser.name} is new user',
+                    icon: const Icon(Icons.verified_user_rounded),
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.TOP,
+                    boxShadows: [
+                      const BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 1
+                      )
+                    ]
+                  );
                 },
                 child: const Text('Set User', style: TextStyle(color: Colors.white),)
               ),
               MaterialButton(
                 color: Colors.teal,
                 onPressed: (){
-                  userBloc.add(SetUserAge(age: 78));
+                  userController.setAge(age: 78);
                 },
                 child: const Text('Set Years old', style: TextStyle(color: Colors.white),)
               ),
               MaterialButton(
                 color: Colors.teal,
                 onPressed: (){
-                  userBloc.add(AddUserProfession(profession: 'AWS EC2'));
+                  userController.addProfession(profession: 'VC TOmae');
                 },
                 child: const Text('Add Profession', style: TextStyle(color: Colors.white),)
+              ),
+              MaterialButton(
+                color: Colors.teal,
+                onPressed: (){
+                  Get.changeTheme(Get.isDarkMode ? ThemeData.light() : ThemeData.dark());
+                },
+                child: const Text('Change Theme', style: TextStyle(color: Colors.white),)
               )
             ],
           ),

@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_states/bloc/bloc/user_bloc.dart';
+import 'package:flutter_states/controllers/user_controller.dart';
 import 'package:flutter_states/models/user.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 
 
 class Screen1 extends StatelessWidget {
@@ -11,38 +13,39 @@ class Screen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return  Scaffold(
-        appBar: AppBar(
-          title: const Text('Screen1',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
-          actions: [
-            IconButton(onPressed: () {
-              BlocProvider.of<UserBloc>(context, listen: false).add(DeleteUser());
-            }, 
-            icon: const Icon(Icons.logout_outlined)
-          )
-          ],
-          backgroundColor: Colors.teal,
-          iconTheme: const IconThemeData(color: Colors.white),
-        ),
 
-        body: BlocBuilder<UserBloc, UserState>(
-          // buildWhen: (previous, current) {
-            
-          // },
-          builder: (context, state) {
-            return state.existUser 
-              ? InfoUser(user: state.user!,)
-              : const Center(
-                child: Text('Not selected user'),
-              );
+    final userController = Get.put(UserController()); //* inject controller
 
-          },
-        ),
+    return  Scaffold(
+      appBar: AppBar(
+        title: const Text('Screen1',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
+        actions: [
+          IconButton(onPressed: () {
+            userController.removeUser();
+          }, 
+          icon: const Icon(Icons.logout_outlined)
+        )
+        ],
+        backgroundColor: Colors.teal,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
 
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, 'screen2'),
-          child: const Icon(Icons.account_balance_wallet_rounded),
+      body: Obx(
+        () => userController.existUser.value
+          ? InfoUser(user: userController.user.value,)
+          : const Center(child: Text('No user selected'),)
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(
+          'screen2', 
+          arguments: {
+            'name': 'Victor mosquera',
+            'age': 45
+          }
         ),
+        child: const Icon(Icons.account_balance_wallet_rounded),
+      ),
     );
   }
 }
@@ -59,7 +62,6 @@ class InfoUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final userBloc = BlocProvider.of<UserBloc>(context, listen: true);
 
     return Container(
       width: double.infinity,
